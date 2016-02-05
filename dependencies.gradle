@@ -1,0 +1,50 @@
+allprojects {
+    repositories {
+        jcenter()
+    }
+}
+
+ext {
+    supportVersion = '23.1.1'
+    gsonVersion = '2.5'
+    daggerVersion = '2.0.2'
+    butterKnifeVersion = '7.0.1'
+    javaxAnnotationVersion = '1.0'
+    rxJavaVersion = '1.1.0'
+    rxAndroidVersion = '1.1.0'
+    retrofitVersion = '1.9.0'
+    slidingUpPanelVersion = '3.2.0'
+    timberVersion = "3.1.0"
+
+    presentationDependencies = [
+            support        : "com.android.support:support-v4:${supportVersion}",
+            appcompat      : "com.android.support:appcompat-v7:${supportVersion}",
+            recyclerView   : "com.android.support:recyclerview-v7:${supportVersion}",
+            cardView       : "com.android.support:cardview-v7:${supportVersion}",
+            design         : "com.android.support:design:${supportVersion}",
+            daggerCompiler : "com.google.dagger:dagger-compiler:${daggerVersion}",
+            dagger         : "com.google.dagger:dagger:${daggerVersion}",
+            butterKnife    : "com.jakewharton:butterknife:${butterKnifeVersion}",
+            javaxAnnotation: "javax.annotation:jsr250-api:${javaxAnnotationVersion}",
+            slidingUpPanel : "com.sothree.slidinguppanel:library:${slidingUpPanelVersion}",
+    ]
+
+    domainDependencies = [
+            daggerCompiler : "com.google.dagger:dagger-compiler:${daggerVersion}",
+            dagger         : "com.google.dagger:dagger:${daggerVersion}",
+            javaxAnnotation: "javax.annotation:jsr250-api:${javaxAnnotationVersion}",
+            rxJava         : "io.reactivex:rxjava:${rxJavaVersion}"
+    ]
+
+    dataDependencies = [
+            daggerCompiler     : "com.google.dagger:dagger-compiler:${daggerVersion}",
+            dagger             : "com.google.dagger:dagger:${daggerVersion}",
+            retrofit           : "com.squareup.retrofit:retrofit:${retrofitVersion}",
+            gson               : "com.google.code.gson:gson:${gsonVersion}",
+            rxJava             : "io.reactivex:rxjava:${rxJavaVersion}",
+            rxAndroid          : "io.reactivex:rxandroid:${rxAndroidVersion}",
+            okHttp             : "com.squareup.okhttp:okhttp:2.4.0",
+            javaxAnnotation    : "javax.annotation:jsr250-api:${javaxAnnotationVersion}",
+            timber             : "com.jakewharton.timber:timber:${timberVersion}"
+    ]
+}

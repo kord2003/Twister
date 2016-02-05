@@ -1,0 +1,43 @@
+apply plugin: 'com.android.application'
+apply plugin: 'com.neenbedankt.android-apt'
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.2"
+
+    defaultConfig {
+        applicationId "com.example.twister"
+        minSdkVersion 19
+        targetSdkVersion 23
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    def presentationDependencies = rootProject.ext.presentationDependencies
+
+    compile project(':domain')
+    compile project(':data')
+
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    testCompile 'junit:junit:4.12'
+
+    compile presentationDependencies.support
+    compile presentationDependencies.appcompat
+    compile presentationDependencies.recyclerView
+    compile presentationDependencies.cardView
+    compile presentationDependencies.design
+    provided presentationDependencies.daggerCompiler
+    compile presentationDependencies.dagger
+    compile presentationDependencies.butterKnife
+    provided presentationDependencies.javaxAnnotation
+    compile presentationDependencies.slidingUpPanel
+    compile 'com.timehop.stickyheadersrecyclerview:library:0.4.3@aar'
+}

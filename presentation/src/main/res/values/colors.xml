@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#FF3F51B5</color>
+    <color name="colorPrimaryDark">#FF303F9F</color>
+    <color name="colorAccent">#FFFF4081</color>
+    <color name="bg_structure">#FF20BC80</color>
+    <color name="bg_thermostat">#FF2080BC</color>
+    <color name="bg_smoke_detector">#FFBCBC80</color>
+    <color name="fc_main_white">#FFFFFFFF</color>
+</resources>
