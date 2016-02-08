@@ -44,6 +44,8 @@ public class DeviceMapper {
                 );
             } else if (v instanceof SmokeDetectorRepresentation) {
                 SmokeDetectorRepresentation sdr = (SmokeDetectorRepresentation) v;
+                SmokeDetector.AlarmState coAlarmState = SmokeDetector.AlarmState.valueOf(sdr.coAlarmState.toUpperCase());
+                SmokeDetector.AlarmState smokeAlarmState = SmokeDetector.AlarmState.valueOf(sdr.smokeAlarmState.toUpperCase());
                 device = new SmokeDetector(
                         sdr.deviceID,
                         sdr.locale,
@@ -54,8 +56,8 @@ public class DeviceMapper {
                         sdr.lastConnection,
                         sdr.isOnline,
                         sdr.batteryHealth,
-                        sdr.coAlarmState,
-                        sdr.smokeAlarmState
+                        coAlarmState,
+                        smokeAlarmState
                 );
             } else if (v instanceof DeviceRepresentation) {
                 device = new Device(

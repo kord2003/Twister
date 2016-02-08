@@ -1,10 +1,14 @@
 package com.example.twister.view.activities.adapters;
 
+import android.animation.ArgbEvaluator;
+import android.animation.ValueAnimator;
 import android.content.Context;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.widget.TextView;
 
 import com.example.twister.R;
@@ -62,17 +66,34 @@ public class DevicesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         int viewType = getItemViewType(position);
         switch (DeviceCardViewType.values[viewType]) {
             case THERMOSTAT:
-                ThermostatViewHolder eavh = (ThermostatViewHolder) viewHolder;
+                ThermostatViewHolder tvh = (ThermostatViewHolder) viewHolder;
                 Thermostat thermostat = (Thermostat) devices.get(position);
-                eavh.tvName.setText(thermostat.getName());
-                eavh.tvValue.setText("T: " + thermostat.getAmbientTemperature() + "°C");
+                tvh.tvName.setText(thermostat.getName());
+                tvh.tvValue.setText("T: " + thermostat.getAmbientTemperature() + "°C");
                 break;
 
             case SMOKE_DETECTOR:
-                SmokeDetectorViewHolder mavh = (SmokeDetectorViewHolder) viewHolder;
+                SmokeDetectorViewHolder sdvh = (SmokeDetectorViewHolder) viewHolder;
                 SmokeDetector smokeDetector = (SmokeDetector) devices.get(position);
-                mavh.tvName.setText(smokeDetector.getName());
-                mavh.tvValue.setText("CO: " + smokeDetector.getCoAlarmState() + "\nSmk: " + smokeDetector.getSmokeAlarmState());
+                SmokeDetector.AlarmState coAlarmState = smokeDetector.getCoAlarmState();
+                SmokeDetector.AlarmState smokeAlarmState = smokeDetector.getSmokeAlarmState();
+                sdvh.tvName.setText(smokeDetector.getName());
+                sdvh.tvValue.setText("CO: " + coAlarmState.name() + "\nSmk: " + smokeAlarmState.name());
+
+                int transparentColor = context.getResources().getColor(R.color.bg_detector);
+                if (smokeAlarmState == SmokeDetector.AlarmState.EMERGENCY || coAlarmState == SmokeDetector.AlarmState.EMERGENCY) {
+                    int alarmColor = context.getResources().getColor(R.color.bg_detector_red);
+                    sdvh.stopBlinking(alarmColor);
+                    sdvh.startBlinking(alarmColor, transparentColor);
+                } else if (smokeAlarmState == SmokeDetector.AlarmState.WARNING || coAlarmState == SmokeDetector.AlarmState.WARNING) {
+                    int alarmColor = context.getResources().getColor(R.color.bg_detector_yellow);
+                    sdvh.stopBlinking(alarmColor);
+                    sdvh.startBlinking(alarmColor, transparentColor);
+                } else {
+                    int okColor = context.getResources().getColor(R.color.bg_detector_green);
+                    sdvh.stopBlinking(okColor);
+                }
+
                 break;
         }
     }
@@ -164,11 +185,39 @@ public class DevicesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public static class SmokeDetectorViewHolder extends RecyclerView.ViewHolder {
         final TextView tvName;
         final TextView tvValue;
+        final CardView cvAlarmStatus;
+        private ValueAnimator alarmColorAnimation;
+        private static final int BLINKING_DELAY = 500;
 
         public SmokeDetectorViewHolder(View v) {
             super(v);
             tvName = (TextView) v.findViewById(R.id.tvName);
             tvValue = (TextView) v.findViewById(R.id.tvValue);
+            cvAlarmStatus = (CardView) v.findViewById(R.id.cvAlarmStatus);
+        }
+
+        public void startBlinking(int colorFrom, int colorTo) {
+            //if (alarmColorAnimation == null) {
+                alarmColorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
+                alarmColorAnimation.setDuration(BLINKING_DELAY); // milliseconds
+                alarmColorAnimation.setRepeatMode(-1);
+                alarmColorAnimation.setRepeatCount(Animation.INFINITE);
+                alarmColorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    @Override
+                    public void onAnimationUpdate(ValueAnimator animator) {
+                        cvAlarmStatus.setCardBackgroundColor((int) animator.getAnimatedValue());
+                    }
+                });
+            //}
+            alarmColorAnimation.start();
+        }
+
+        public void stopBlinking(int color) {
+            if (alarmColorAnimation != null) {
+                alarmColorAnimation.end();
+                alarmColorAnimation.cancel();
+            }
+            cvAlarmStatus.setCardBackgroundColor(color);
         }
     }
 

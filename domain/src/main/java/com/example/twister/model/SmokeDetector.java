@@ -4,11 +4,12 @@ package com.example.twister.model;
  * Created by sharlukovich on 05.02.2016.
  */
 public class SmokeDetector extends Device {
-    private String batteryHealth;
-    private String coAlarmState;
-    private String smokeAlarmState;
 
-    public SmokeDetector(String deviceID, String locale, String softwareVersion, String structureID, String name, String nameLong, String lastConnection, boolean isOnline, String batteryHealth, String coAlarmState, String smokeAlarmState) {
+    private String batteryHealth;
+    private AlarmState coAlarmState;
+    private AlarmState smokeAlarmState;
+
+    public SmokeDetector(String deviceID, String locale, String softwareVersion, String structureID, String name, String nameLong, String lastConnection, boolean isOnline, String batteryHealth, AlarmState coAlarmState, AlarmState smokeAlarmState) {
         super(deviceID, locale, softwareVersion, structureID, name, nameLong, lastConnection, isOnline);
         this.batteryHealth = batteryHealth;
         this.coAlarmState = coAlarmState;
@@ -19,11 +20,11 @@ public class SmokeDetector extends Device {
         return batteryHealth;
     }
 
-    public String getCoAlarmState() {
+    public AlarmState getCoAlarmState() {
         return coAlarmState;
     }
 
-    public String getSmokeAlarmState() {
+    public AlarmState getSmokeAlarmState() {
         return smokeAlarmState;
     }
 
@@ -33,5 +34,9 @@ public class SmokeDetector extends Device {
                 "coAlarmState='" + coAlarmState + '\'' +
                 "smokeAlarmState='" + smokeAlarmState + '\'' +
                 "} " + super.toString();
+    }
+
+    public enum AlarmState {
+        OK, WARNING, EMERGENCY
     }
 }

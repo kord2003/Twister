@@ -1,9 +1,12 @@
 package com.example.twister.view.activities;
 
+import android.animation.ArgbEvaluator;
+import android.animation.ValueAnimator;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.animation.Animation;
 import android.widget.TextView;
 
 import com.example.twister.R;
@@ -22,6 +25,7 @@ import timber.log.Timber;
  */
 public class SmokeDetectorActivity extends BaseActivity implements SmokeDetectorView {
 
+    private static final int BLINKING_DELAY = 500;
     // Views
     @Bind(R.id.toolbar)
     protected Toolbar toolbar;
@@ -42,6 +46,10 @@ public class SmokeDetectorActivity extends BaseActivity implements SmokeDetector
 
     // Plain fields
     private String deviceId;
+
+    // Animators
+    private ValueAnimator coAlarmColorAnimation;
+    private ValueAnimator smokeAlarmColorAnimation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,10 +95,94 @@ public class SmokeDetectorActivity extends BaseActivity implements SmokeDetector
         Timber.d("handleSmokeDetector: " + data);
         String name = data.getName();
         tvName.setText(name);
-        String coAlarmState = data.getCoAlarmState();
-        tvCOStatus.setText(coAlarmState);
-        String smokeAlarmState = data.getSmokeAlarmState();
-        tvSmokeStatus.setText(smokeAlarmState);
+        SmokeDetector.AlarmState coAlarmState = data.getCoAlarmState();
+        tvCOStatus.setText(coAlarmState.name());
+        SmokeDetector.AlarmState smokeAlarmState = data.getSmokeAlarmState();
+        tvSmokeStatus.setText(smokeAlarmState.name());
+
+        int transparentColor = getResources().getColor(R.color.bg_detector);
+        int okColor = getResources().getColor(R.color.bg_detector_green);
+        int coAlarmColor = getAlarmColor(coAlarmState);
+        cvCOStatus.setCardBackgroundColor(coAlarmColor);
+        int smokeAlarmColor = getAlarmColor(smokeAlarmState);
+        cvSmokeStatus.setCardBackgroundColor(smokeAlarmColor);
+        if (coAlarmState != SmokeDetector.AlarmState.OK) {
+            stopCOBlinking(coAlarmColor);
+            startCOBlinking(coAlarmColor, transparentColor);
+        } else {
+            stopCOBlinking(okColor);
+        }
+        if (smokeAlarmState != SmokeDetector.AlarmState.OK) {
+            stopSmokeBlinking(coAlarmColor);
+            startSmokeBlinking(smokeAlarmColor, transparentColor);
+        } else {
+            stopSmokeBlinking(okColor);
+        }
+    }
+
+    private void startCOBlinking(int colorFrom, int colorTo) {
+        //if (coAlarmColorAnimation == null) {
+            coAlarmColorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
+            coAlarmColorAnimation.setDuration(BLINKING_DELAY); // milliseconds
+            coAlarmColorAnimation.setRepeatMode(-1);
+            coAlarmColorAnimation.setRepeatCount(Animation.INFINITE);
+            coAlarmColorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animator) {
+                    cvCOStatus.setCardBackgroundColor((int) animator.getAnimatedValue());
+                }
+            });
+        //}
+        coAlarmColorAnimation.start();
+    }
+
+    private void stopCOBlinking(int color) {
+        if (coAlarmColorAnimation != null) {
+            coAlarmColorAnimation.end();
+            coAlarmColorAnimation.cancel();
+        }
+        cvCOStatus.setCardBackgroundColor(color);
+    }
+
+    private void startSmokeBlinking(int colorFrom, int colorTo) {
+        //if (smokeAlarmColorAnimation == null) {
+            smokeAlarmColorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
+            smokeAlarmColorAnimation.setDuration(BLINKING_DELAY); // milliseconds
+            smokeAlarmColorAnimation.setRepeatMode(-1);
+            smokeAlarmColorAnimation.setRepeatCount(Animation.INFINITE);
+            smokeAlarmColorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animator) {
+                    cvSmokeStatus.setCardBackgroundColor((int) animator.getAnimatedValue());
+                }
+            });
+        //}
+        smokeAlarmColorAnimation.start();
+    }
+
+    private void stopSmokeBlinking(int color) {
+        if (smokeAlarmColorAnimation != null) {
+            smokeAlarmColorAnimation.end();
+            smokeAlarmColorAnimation.cancel();
+        }
+        cvSmokeStatus.setCardBackgroundColor(color);
+    }
+
+    private int getAlarmColor(SmokeDetector.AlarmState alarmState) {
+        Timber.d("getAlarmColor: " + alarmState.name());
+        int color = 0xFFFFFFFF;
+        switch (alarmState) {
+            case OK:
+                color = getResources().getColor(R.color.bg_detector_green);
+                break;
+            case WARNING:
+                color = getResources().getColor(R.color.bg_detector_yellow);
+                break;
+            case EMERGENCY:
+                color = getResources().getColor(R.color.bg_detector_red);
+                break;
+        }
+        return color;
     }
 
     @Override

@@ -74,12 +74,14 @@ public class NestOverviewPresenterImpl implements NestOverviewPresenter {
 
     @Override
     public void loadStructures() {
+        showProgress();
         accessTokenUseCase.unsubscribe();
         accessTokenUseCase.setCode(null);
         accessTokenUseCase.execute(new DefaultSubscriber<AccessToken>() {
 
             @Override
             public void onError(Throwable e) {
+                hideProgress();
                 Timber.e(":::: accessTokenUseCase " + e.getMessage());
                 e.printStackTrace();
                 showErrorMessage(new DefaultErrorBundle((Exception) e));
@@ -100,6 +102,7 @@ public class NestOverviewPresenterImpl implements NestOverviewPresenter {
         getAllStructuresUseCase.execute(new DefaultSubscriber<List<Structure>>() {
             @Override
             public void onError(Throwable e) {
+                hideProgress();
                 Timber.e(":::: getAllStructuresUseCase " + e.getMessage());
                 e.printStackTrace();
                 showErrorMessage(new DefaultErrorBundle((Exception) e));
@@ -123,6 +126,7 @@ public class NestOverviewPresenterImpl implements NestOverviewPresenter {
         getAllDevicesUseCase.execute(new DefaultSubscriber<List<Device>>() {
             @Override
             public void onError(Throwable e) {
+                hideProgress();
                 Timber.e(":::: getAllDevicesUseCase " + e.getMessage());
                 e.printStackTrace();
                 showErrorMessage(new DefaultErrorBundle((Exception) e));
@@ -130,6 +134,7 @@ public class NestOverviewPresenterImpl implements NestOverviewPresenter {
 
             @Override
             public void onNext(List<Device> data) {
+                hideProgress();
                 Timber.d(":::: getAllDevicesUseCase finished: " + data.size());
                 if (view != null) {
                     view.handleDevices(data);

@@ -1,5 +1,6 @@
 package com.example.twister.view.activities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -35,6 +36,7 @@ public class NestOverviewActivity extends BaseActivity implements NestOverviewVi
     protected RecyclerView lstStructures;
     @Bind(R.id.toolbar)
     protected Toolbar toolbar;
+    private ProgressDialog progressDialog;
 
     // Adapters
     private DevicesAdapter devicesAdapter;
@@ -55,6 +57,14 @@ public class NestOverviewActivity extends BaseActivity implements NestOverviewVi
         setSupportActionBar(toolbar);
         initializePresenters();
         initializeAdapters();
+        initializeProgressDialog();
+    }
+
+    private void initializeProgressDialog() {
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setCancelable(true);
+        progressDialog.setMessage(getString(R.string.loading));
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
     }
 
     private void initializeAdapters() {
@@ -129,12 +139,12 @@ public class NestOverviewActivity extends BaseActivity implements NestOverviewVi
 
     @Override
     public void showProgress() {
-
+        progressDialog.show();
     }
 
     @Override
     public void hideProgress() {
-
+        progressDialog.dismiss();
     }
 
     @Override
