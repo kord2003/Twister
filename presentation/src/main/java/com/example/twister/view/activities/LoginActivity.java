@@ -10,6 +10,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.example.twister.R;
+import com.example.twister.model.MetaData;
 import com.example.twister.presenters.LoginPresenter;
 import com.example.twister.view.LoginView;
 
@@ -35,7 +36,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
 
     // Plain fields
     private String code;
-    private com.example.twister.model.ClientMetaData clientMetaData;
+    private MetaData metaData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +50,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
     protected void onResume() {
         super.onResume();
         loginPresenter.attach(this);
-        loginPresenter.loadClientMetaData();
+        loginPresenter.loadMetaData();
     }
 
     private void initializePresenters() {
@@ -84,8 +85,8 @@ public class LoginActivity extends BaseActivity implements LoginView {
     }
 
     @Override
-    public void handleClientMetaData(com.example.twister.model.ClientMetaData clientMetaData) {
-        this.clientMetaData = clientMetaData;
+    public void handleMetaData(MetaData metaData) {
+        this.metaData = metaData;
         showLoginPage();
     }
 
@@ -94,7 +95,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
         webView.setWebViewClient(new RedirectClient());
         webView.getSettings().setJavaScriptEnabled(true);
 
-        final String url = String.format(REQUEST_CLIENT_CODE_URL, clientMetaData.getClientID(), clientMetaData.getStateValue());
+        final String url = String.format(REQUEST_CLIENT_CODE_URL, metaData.getClientId(), metaData.getStateValue());
         Timber.d("url: " + url);
         webView.loadUrl(url);
     }
@@ -112,7 +113,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
 
         private boolean processRedirect(String url) {
             Timber.d("redirect url: " + url);
-            if (!url.startsWith(clientMetaData.getRedirectURL())) {
+            if (!url.startsWith(metaData.getRedirectURL())) {
                 code = null;
                 return false;
             }

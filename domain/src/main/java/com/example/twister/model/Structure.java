@@ -9,15 +9,12 @@ import java.util.List;
  */
 
 public class Structure {
-    public static final String STATE_AWAY = "away";
-    public static final String STATE_AUTO_AWAY = "auto-away";
-    public static final String STATE_HOME = "home";
 
-    private String structureID;
+    private String structureId;
 
-    private List<String> thermostatIDs;
+    private List<String> thermostats;
 
-    private List<String> smokeCOAlarms;
+    private List<String> smokeDetectors;
 
     private String name;
 
@@ -33,15 +30,15 @@ public class Structure {
 
     private Eta eta;
 
-    public Structure(String structureID, List<String> thermostatIDs, List<String> smokeCOAlarms, String name, String countryCode, String peakPeriodStartTime, String peakPeriodEndTime, String timeZone, String awayState, Eta eta) {
-        this.structureID = structureID;
-        this.thermostatIDs = thermostatIDs;
-        if (this.thermostatIDs == null) {
-            this.thermostatIDs = new ArrayList<>();
+    public Structure(String structureId, List<String> thermostats, List<String> smokeDetectors, String name, String countryCode, String peakPeriodStartTime, String peakPeriodEndTime, String timeZone, String awayState, Eta eta) {
+        this.structureId = structureId;
+        this.thermostats = thermostats;
+        if (this.thermostats == null) {
+            this.thermostats = new ArrayList<>();
         }
-        this.smokeCOAlarms = smokeCOAlarms;
-        if (this.smokeCOAlarms == null) {
-            this.smokeCOAlarms = new ArrayList<>();
+        this.smokeDetectors = smokeDetectors;
+        if (this.smokeDetectors == null) {
+            this.smokeDetectors = new ArrayList<>();
         }
         this.name = name;
         this.countryCode = countryCode;
@@ -52,16 +49,16 @@ public class Structure {
         this.eta = eta;
     }
 
-    public String getStructureID() {
-        return structureID;
+    public String getStructureId() {
+        return structureId;
     }
 
-    public List<String> getThermostatIDs() {
-        return thermostatIDs;
+    public List<String> getThermostats() {
+        return thermostats;
     }
 
-    public List<String> getSmokeCOAlarms() {
-        return smokeCOAlarms;
+    public List<String> getSmokeDetectors() {
+        return smokeDetectors;
     }
 
     public String getName() {
@@ -95,7 +92,7 @@ public class Structure {
     @Override
     public String toString() {
         return "Structure{" +
-                "structureID='" + structureID + '\'' +
+                "structureId='" + structureId + '\'' +
                 ", name='" + name + '\'' +
                 ", awayState='" + awayState + '\'' +
                 '}';
@@ -104,7 +101,7 @@ public class Structure {
     public static class StructureComparator implements Comparator<Structure> {
         @Override
         public int compare(Structure o1, Structure o2) {
-            return o2.getStructureID().compareTo(o1.getStructureID());
+            return o2.getStructureId().compareTo(o1.getStructureId());
         }
     }
 }

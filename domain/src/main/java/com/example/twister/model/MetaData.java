@@ -2,23 +2,21 @@ package com.example.twister.model;
 
 import java.util.Random;
 
-public class ClientMetaData {
-    // TODO refactor class
-    private final String clientID;
+public class MetaData {
+    private final String clientId;
     private final String stateValue;
     private final String clientSecret;
     private final String redirectURL;
 
-    public ClientMetaData(String clientID, String clientSecret, String redirectURL) {
-        this.clientID = clientID;
-        // TODO validate
-        this.stateValue = "app-state" + System.nanoTime() + "-" + new Random().nextInt();
+    public MetaData(String clientId, String clientSecret, String redirectURL) {
+        this.clientId = clientId;
+        this.stateValue = "state-" + System.nanoTime() + "-" + new Random().nextInt();
         this.clientSecret = clientSecret;
         this.redirectURL = redirectURL;
     }
 
-    public String getClientID() {
-        return clientID;
+    public String getClientId() {
+        return clientId;
     }
 
     public String getStateValue() {

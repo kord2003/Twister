@@ -13,7 +13,7 @@ public interface LoginPresenter {
 
     void destroy();
 
-    void loadClientMetaData();
+    void loadMetaData();
 
     void loadAccessToken(String code);
 }

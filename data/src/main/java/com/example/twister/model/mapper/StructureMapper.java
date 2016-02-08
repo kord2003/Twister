@@ -25,9 +25,9 @@ public class StructureMapper {
         if (v != null) {
             Eta eta = etaMapper.transform(v.eta);
             structure = new Structure(
-                    v.structureID,
-                    v.thermostatIDs,
-                    v.smokeCOAlarms,
+                    v.structureId,
+                    v.thermostats,
+                    v.smokeDetectors,
                     v.name,
                     v.countryCode,
                     v.peakPeriodStartTime,

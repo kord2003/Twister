@@ -22,4 +22,5 @@ dependencies {
 
     compile domainDependencies.dagger
     compile domainDependencies.rxJava
+    compile domainDependencies.timber
 }

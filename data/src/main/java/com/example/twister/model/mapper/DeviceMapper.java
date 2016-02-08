@@ -38,7 +38,9 @@ public class DeviceMapper {
                         tr.isOnline,
                         tr.canCool,
                         tr.ambientTemperature,
-                        tr.targetTemperature
+                        tr.targetTemperature,
+                        tr.hasFan,
+                        tr.humidity
                 );
             } else if (v instanceof SmokeDetectorRepresentation) {
                 SmokeDetectorRepresentation sdr = (SmokeDetectorRepresentation) v;

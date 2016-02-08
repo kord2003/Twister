@@ -1,16 +1,21 @@
 package com.example.twister.view.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 
 import com.example.twister.R;
 import com.example.twister.model.Device;
+import com.example.twister.model.SmokeDetector;
 import com.example.twister.model.Structure;
+import com.example.twister.model.Thermostat;
 import com.example.twister.presenters.NestOverviewPresenter;
 import com.example.twister.view.NestOverviewView;
-import com.example.twister.view.activities.adapters.CustomExpandableAdapter;
+import com.example.twister.view.activities.adapters.DevicesAdapter;
+import com.example.twister.view.activities.listeners.RecyclerItemClickListener;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 
 import java.util.ArrayList;
@@ -24,6 +29,7 @@ import timber.log.Timber;
 
 public class NestOverviewActivity extends BaseActivity implements NestOverviewView {
 
+    public static final String EXTRA_DEVICE_ID = "EXTRA_DEVICE_ID";
     // Views
     @Bind(R.id.lstStructures)
     protected RecyclerView lstStructures;
@@ -31,7 +37,7 @@ public class NestOverviewActivity extends BaseActivity implements NestOverviewVi
     protected Toolbar toolbar;
 
     // Adapters
-    private CustomExpandableAdapter customExpandableAdapter;
+    private DevicesAdapter devicesAdapter;
 
     // Presenters
     @Inject
@@ -52,12 +58,33 @@ public class NestOverviewActivity extends BaseActivity implements NestOverviewVi
     }
 
     private void initializeAdapters() {
-
         RecyclerView.LayoutManager linearLayoutManager = new LinearLayoutManager(this);
         lstStructures.setLayoutManager(linearLayoutManager);
-        customExpandableAdapter = new CustomExpandableAdapter(this, structures, devices);
-        lstStructures.setAdapter(customExpandableAdapter);
-        lstStructures.addItemDecoration(new StickyRecyclerHeadersDecoration(customExpandableAdapter));
+        devicesAdapter = new DevicesAdapter(this, structures, devices);
+        lstStructures.setAdapter(devicesAdapter);
+        lstStructures.addItemDecoration(new StickyRecyclerHeadersDecoration(devicesAdapter));
+        lstStructures.addOnItemTouchListener(
+                new RecyclerItemClickListener(this, new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        Device device = devices.get(position);
+                        openDeviceDetails(device);
+                    }
+                })
+        );
+    }
+
+    private void openDeviceDetails(Device device) {
+        Intent intent = null;
+        if (device instanceof Thermostat) {
+            intent = new Intent(this, ThermostatActivity.class);
+        } else if (device instanceof SmokeDetector) {
+            intent = new Intent(this, SmokeDetectorActivity.class);
+        }
+        if (intent != null) {
+            intent.putExtra(EXTRA_DEVICE_ID, device.getDeviceId());
+            startActivity(intent);
+        }
     }
 
     private void initializePresenters() {
@@ -96,7 +123,7 @@ public class NestOverviewActivity extends BaseActivity implements NestOverviewVi
         devices.clear();
         devices.addAll(data);
         if (structures.size() > 0 && devices.size() > 0) {
-            customExpandableAdapter.notifyDataSetChanged();
+            devicesAdapter.notifyDataSetChanged();
         }
     }
 

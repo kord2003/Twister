@@ -33,7 +33,8 @@ ext {
             daggerCompiler : "com.google.dagger:dagger-compiler:${daggerVersion}",
             dagger         : "com.google.dagger:dagger:${daggerVersion}",
             javaxAnnotation: "javax.annotation:jsr250-api:${javaxAnnotationVersion}",
-            rxJava         : "io.reactivex:rxjava:${rxJavaVersion}"
+            rxJava         : "io.reactivex:rxjava:${rxJavaVersion}",
+            timber         : "com.jakewharton.timber:timber:${timberVersion}"
     ]
 
     dataDependencies = [

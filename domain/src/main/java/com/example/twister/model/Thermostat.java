@@ -7,20 +7,26 @@ public class Thermostat extends Device {
     private boolean canCool;
     private float ambientTemperature;
     private float targetTemperature;
+    private boolean hasFan;
+    private float humidity;
 
-    public Thermostat(String deviceID, String locale, String softwareVersion, String structureID,
-                      String name, String nameLong, String lastConnection, boolean isOnline,
-                      boolean canCool, float ambientTemperature, float targetTemperature) {
-        super(deviceID, locale, softwareVersion, structureID, name, nameLong, lastConnection, isOnline);
+    public Thermostat(String deviceId, String locale, String softwareVersion, String structureId, String name, String nameLong, String lastConnection, boolean isOnline, boolean canCool, float ambientTemperature, float targetTemperature, boolean hasFan, float humidity) {
+        super(deviceId, locale, softwareVersion, structureId, name, nameLong, lastConnection, isOnline);
         this.canCool = canCool;
         this.ambientTemperature = ambientTemperature;
         this.targetTemperature = targetTemperature;
+        this.hasFan = hasFan;
+        this.humidity = humidity;
     }
 
     @Override
     public String toString() {
         return "Thermostat{" +
-                "canCool='" + canCool + '\'' +
+                "canCool=" + canCool +
+                ", ambientTemperature=" + ambientTemperature +
+                ", targetTemperature=" + targetTemperature +
+                ", hasFan=" + hasFan +
+                ", humidity=" + humidity +
                 "} " + super.toString();
     }
 
@@ -34,5 +40,13 @@ public class Thermostat extends Device {
 
     public float getTargetTemperature() {
         return targetTemperature;
+    }
+
+    public boolean isHasFan() {
+        return hasFan;
+    }
+
+    public float getHumidity() {
+        return humidity;
     }
 }

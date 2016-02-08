@@ -40,4 +40,5 @@ dependencies {
     provided presentationDependencies.javaxAnnotation
     compile presentationDependencies.slidingUpPanel
     compile 'com.timehop.stickyheadersrecyclerview:library:0.4.3@aar'
+    compile 'pl.pawelkleczkowski.customgauge:CustomGauge:1.0.1'
 }

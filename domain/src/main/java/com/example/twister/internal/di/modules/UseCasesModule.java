@@ -3,11 +3,11 @@ package com.example.twister.internal.di.modules;
 import com.example.twister.executor.PostExecutionThread;
 import com.example.twister.executor.ThreadExecutor;
 import com.example.twister.interactor.AccessTokenUseCase;
-import com.example.twister.interactor.ClientMetaDataUseCase;
 import com.example.twister.interactor.GetAllDevicesUseCase;
 import com.example.twister.interactor.GetAllStructuresUseCase;
-import com.example.twister.interactor.SaveStructuresUseCase;
-import com.example.twister.interactor.SelectedStructureUseCase;
+import com.example.twister.interactor.GetSmokeDetectorUseCase;
+import com.example.twister.interactor.GetThermostatUseCase;
+import com.example.twister.interactor.MetaDataUseCase;
 import com.example.twister.internal.di.PerActivity;
 import com.example.twister.repository.AuthRepository;
 import com.example.twister.repository.NestRepository;
@@ -32,20 +32,20 @@ public class UseCasesModule {
 
     @Provides
     @PerActivity
-    SelectedStructureUseCase provideSelectedStructureUseCase(NestRepository nestRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread) {
-        return new SelectedStructureUseCase(nestRepository, threadExecutor, postExecutionThread);
+    MetaDataUseCase provideMetaDataUseCase(AuthRepository authRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread) {
+        return new MetaDataUseCase(authRepository, threadExecutor, postExecutionThread);
     }
 
     @Provides
     @PerActivity
-    SaveStructuresUseCase provideSaveStructuresUseCase(NestRepository nestRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread) {
-        return new SaveStructuresUseCase(nestRepository, threadExecutor, postExecutionThread);
+    GetSmokeDetectorUseCase provideGetSmokeDetectorUseCase(NestRepository nestRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread) {
+        return new GetSmokeDetectorUseCase(nestRepository, threadExecutor, postExecutionThread);
     }
 
     @Provides
     @PerActivity
-    ClientMetaDataUseCase provideClientMetaDataUseCase(AuthRepository authRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread) {
-        return new ClientMetaDataUseCase(authRepository, threadExecutor, postExecutionThread);
+    GetThermostatUseCase provideGetThermostatUseCase(NestRepository nestRepository, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread) {
+        return new GetThermostatUseCase(nestRepository, threadExecutor, postExecutionThread);
     }
 
     @Provides

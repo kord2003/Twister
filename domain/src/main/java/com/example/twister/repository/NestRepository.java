@@ -9,13 +9,7 @@ import java.util.List;
 import rx.Observable;
 
 public interface NestRepository {
-    Observable<Structure> registerForSelectedStructureUpdates();
-
     Observable<List<Structure>> registerForStructuresUpdates(AccessToken accessToken);
 
     Observable<List<Device>> registerForDevicesUpdates();
-
-    Observable<Structure> updateStructure(Structure structure);
-
-    void setSelectedStructure(Structure structure);
 }

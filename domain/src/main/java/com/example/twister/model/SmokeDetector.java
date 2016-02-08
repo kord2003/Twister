@@ -5,8 +5,8 @@ package com.example.twister.model;
  */
 public class SmokeDetector extends Device {
     private String batteryHealth;
-    public String coAlarmState;
-    public String smokeAlarmState;
+    private String coAlarmState;
+    private String smokeAlarmState;
 
     public SmokeDetector(String deviceID, String locale, String softwareVersion, String structureID, String name, String nameLong, String lastConnection, boolean isOnline, String batteryHealth, String coAlarmState, String smokeAlarmState) {
         super(deviceID, locale, softwareVersion, structureID, name, nameLong, lastConnection, isOnline);

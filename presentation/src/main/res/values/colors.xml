@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#FF3F51B5</color>
-    <color name="colorPrimaryDark">#FF303F9F</color>
+    <color name="colorPrimary">#FFB080BC</color>
+    <color name="colorPrimaryDark">#FF90609C</color>
     <color name="colorAccent">#FFFF4081</color>
-    <color name="bg_structure">#FF20BC80</color>
-    <color name="bg_thermostat">#FF2080BC</color>
-    <color name="bg_smoke_detector">#FFBCBC80</color>
+    <color name="bg_structure">#FFB080BC</color>
+    <color name="bg_thermostat">#FFA0CCF0</color>
+    <color name="bg_detector">#FFA0CCF0</color>
+    <color name="bg_detector_green">#FF20BC20</color>
+    <color name="bg_detector_yellow">#FFBCBC20</color>
+    <color name="bg_detector_red">#FFBC2020</color>
     <color name="fc_main_white">#FFFFFFFF</color>
 </resources>

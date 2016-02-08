@@ -11,13 +11,13 @@ import java.util.List;
 public class StructureRepresentation {
 
     @SerializedName("structure_id")
-    public String structureID;
+    public String structureId;
 
     @SerializedName("thermostats")
-    public List<String> thermostatIDs;
+    public List<String> thermostats;
 
     @SerializedName("smoke_co_alarms")
-    public List<String> smokeCOAlarms;
+    public List<String> smokeDetectors;
 
     @SerializedName("name")
     public String name;

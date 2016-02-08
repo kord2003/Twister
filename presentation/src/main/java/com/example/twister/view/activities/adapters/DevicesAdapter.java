@@ -21,7 +21,7 @@ import timber.log.Timber;
 /**
  * Created by sharlukovich on 05.02.2016.
  */
-public class CustomExpandableAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements StickyRecyclerHeadersAdapter<RecyclerView.ViewHolder> {
+public class DevicesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements StickyRecyclerHeadersAdapter<RecyclerView.ViewHolder> {
     private final Context context;
     private final List<Device> devices;
     private final List<Structure> structures;
@@ -33,7 +33,7 @@ public class CustomExpandableAdapter extends RecyclerView.Adapter<RecyclerView.V
         public static final DeviceCardViewType values[] = values();
     }
 
-    public CustomExpandableAdapter(Context context, List<Structure> structures, List<Device> dataSet) {
+    public DevicesAdapter(Context context, List<Structure> structures, List<Device> dataSet) {
         this.context = context;
         this.structures = structures;
         this.devices = dataSet;
@@ -83,26 +83,26 @@ public class CustomExpandableAdapter extends RecyclerView.Adapter<RecyclerView.V
         switch (DeviceCardViewType.values[viewType]) {
             case THERMOSTAT:
                 Thermostat thermostat = (Thermostat) devices.get(position);
-                structure = getStructureByDeviceId(thermostat.getDeviceID());
+                structure = getStructureByDeviceId(thermostat.getDeviceId());
                 break;
 
             case SMOKE_DETECTOR:
                 SmokeDetector smokeDetector = (SmokeDetector) devices.get(position);
-                structure = getStructureByDeviceId(smokeDetector.getDeviceID());
+                structure = getStructureByDeviceId(smokeDetector.getDeviceId());
                 break;
         }
         return structure;
     }
 
-    private Structure getStructureByDeviceId(String deviceID) {
+    private Structure getStructureByDeviceId(String deviceId) {
         for (Structure structure : structures) {
-            for (String id : structure.getThermostatIDs()) {
-                if (deviceID.equals(id)) {
+            for (String id : structure.getThermostats()) {
+                if (deviceId.equals(id)) {
                     return structure;
                 }
             }
-            for (String id : structure.getSmokeCOAlarms()) {
-                if (deviceID.equals(id)) {
+            for (String id : structure.getSmokeDetectors()) {
+                if (deviceId.equals(id)) {
                     return structure;
                 }
             }

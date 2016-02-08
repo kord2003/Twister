@@ -28,7 +28,6 @@ import javax.inject.Inject;
 
 import rx.Observable;
 import rx.Subscriber;
-import rx.Subscription;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 import rx.subjects.BehaviorSubject;
@@ -45,13 +44,9 @@ public class NestDataRepository implements NestRepository, ValueEventListener, F
     private final StructureMapper structureMapper;
     private final DeviceMapper deviceMapper;
 
-    //private BehaviorSubject<Structure> selectedStructureSubject;
-
     private BehaviorSubject<List<Structure>> structuresSubject;
     private BehaviorSubject<List<Device>> deviceSubject;
 
-    private Structure lastSelectedStructure;
-    private Subscription loadStructuresSubscription;
     private Firebase firebase;
 
     private boolean isSubscribed;
@@ -61,62 +56,17 @@ public class NestDataRepository implements NestRepository, ValueEventListener, F
     public NestDataRepository(StructureMapper structureMapper, DeviceMapper deviceMapper) {
         this.structureMapper = structureMapper;
         this.deviceMapper = deviceMapper;
-        //this.selectedStructureSubject = BehaviorSubject.create();
         this.structuresSubject = BehaviorSubject.create();
         this.deviceSubject = BehaviorSubject.create();
         this.gson = new GsonBuilder().create();
     }
 
-
-    @Override
-    public synchronized Observable<Structure> registerForSelectedStructureUpdates() {
-        /*if (lastSelectedStructure == null && structures != null && structures.size() > 0) {
-            setSelectedStructure(structures.get(0));
-        }
-        return selectedStructureSubject.asObservable();*/
-        return null;
-    }
-
     @Override
     public synchronized Observable<List<Structure>> registerForStructuresUpdates(AccessToken accessToken) {
         Timber.d("registerForStructuresUpdates");
-        if (!isSubscribed/*loadStructuresSubscription == null || loadStructuresSubscription.isUnsubscribed()*/) {
+        if (!isSubscribed) {
             Timber.d("no subscription in progress, starting new one");
             authenticate(accessToken);
-            /*loadStructuresSubscription = loadStructuresObservable().subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new DefaultSubscriber<List<Structure>>() {
-                        private long before;
-                        private long after;
-
-                        @Override
-                        public void onStart() {
-                            before = System.currentTimeMillis();
-                            super.onStart();
-                        }
-
-                        @Override
-                        public void onError(Throwable throwable) {
-                            Timber.e("structuresSubject.onError");
-                            structuresSubject.onError(throwable);
-                        }
-
-                        @Override
-                        public void onNext(List<Structure> data) {
-                            Timber.d("structuresSubject.onNext: " + data.size());
-                            // Caching structures data
-                            structures.clear();
-                            structures.addAll(data);
-                            structuresSubject.onNext(structures);
-                        }
-
-                        @Override
-                        public void onCompleted() {
-                            structuresSubject.onCompleted();
-                            after = System.currentTimeMillis();
-                            Timber.d("structuresSubject.onCompleted: " + (after - before) + "ms");
-                        }
-                    });*/
         }
         return structuresSubject.asObservable();
     }
@@ -124,25 +74,6 @@ public class NestDataRepository implements NestRepository, ValueEventListener, F
     @Override
     public Observable<List<Device>> registerForDevicesUpdates() {
         return deviceSubject.asObservable();
-    }
-
-    @Override
-    public synchronized void setSelectedStructure(Structure structure) {
-        /*if (structure != null && !structure.equals(lastSelectedStructure)) {
-            lastSelectedStructure = structure;
-            selectedStructureSubject.onNext(structure);
-        }*/
-    }
-
-    @Override
-    public Observable<Structure> updateStructure(Structure structure) {
-        return null;
-        /*return authApi.putStructure(structure.getId(), null, structureMapper.toStructureData(structure)).map(new Func1<StructureRepresentation, Structure>() {
-            @Override
-            public Structure call(StructureRepresentation structureRepresentation) {
-                return structureMapper.transform(structureRepresentation);
-            }
-        });*/
     }
 
     private synchronized Firebase getFirebase() {
@@ -243,7 +174,6 @@ public class NestDataRepository implements NestRepository, ValueEventListener, F
         for (Map.Entry<String, Object> entry : structuresMap.entrySet()) {
             final Map<String, Object> value = (Map<String, Object>) entry.getValue();
             Timber.d("updateStructures entry: " + entry.getKey());
-
 
             StructureRepresentation structureRepresentation = parseStructureRepresentation(value);
             if (structureRepresentation != null) {

@@ -12,4 +12,8 @@ public class ThermostatRepresentation extends DeviceRepresentation {
     public float ambientTemperature;
     @SerializedName("target_temperature_c")
     public float targetTemperature;
+    @SerializedName("has_fan")
+    public boolean hasFan;
+    @SerializedName("humidity")
+    public float humidity;
 }

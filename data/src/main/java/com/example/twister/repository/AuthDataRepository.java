@@ -3,8 +3,8 @@ package com.example.twister.repository;
 import com.example.twister.interactor.DefaultSubscriber;
 import com.example.twister.model.AccessToken;
 import com.example.twister.model.AccessTokenRepresentation;
-import com.example.twister.model.ClientMetaData;
 import com.example.twister.model.EmptyBody;
+import com.example.twister.model.MetaData;
 import com.example.twister.model.mapper.AccessTokenMapper;
 import com.example.twister.rest.AuthApi;
 
@@ -22,7 +22,6 @@ import timber.log.Timber;
  * Created by sharlukovich on 03.02.2016.
  */
 public class AuthDataRepository implements AuthRepository {
-
     private static final String CLIENT_ID = "25d255b8-3430-4cc3-855e-87824b646eca";
     private static final String CLIENT_SECRET = "Hd6fI630LY0arA0IaQnQX7ZEs";
     private static final String REDIRECT_URL = "https://google.com/";
@@ -30,7 +29,7 @@ public class AuthDataRepository implements AuthRepository {
     private final AuthApi authApi;
     private final AccessTokenMapper accessTokenMapper;
 
-    private ClientMetaData clientMetaData;
+    private MetaData metaData;
 
     private BehaviorSubject<AccessToken> accessTokenSubject;
 
@@ -45,12 +44,12 @@ public class AuthDataRepository implements AuthRepository {
     }
 
     @Override
-    public synchronized Observable<ClientMetaData> registerForClientMetaDataUpdates() {
-        Timber.d("registerForClientMetaDataUpdates");
-        if (clientMetaData == null) {
-            clientMetaData = new ClientMetaData(CLIENT_ID, CLIENT_SECRET, REDIRECT_URL);
+    public synchronized Observable<MetaData> registerForMetaDataUpdates() {
+        Timber.d("registerForMetaDataUpdates");
+        if (metaData == null) {
+            metaData = new MetaData(CLIENT_ID, CLIENT_SECRET, REDIRECT_URL);
         }
-        return Observable.just(clientMetaData);
+        return Observable.just(metaData);
     }
 
     @Override
@@ -82,7 +81,7 @@ public class AuthDataRepository implements AuthRepository {
 
     public Observable<AccessToken> loadAccessTokenObservable(String code) {
         if (accessToken == null) {
-            return authApi.getAccessToken(code, clientMetaData.getClientID(), clientMetaData.getClientSecret(), new EmptyBody()).map(new Func1<AccessTokenRepresentation, AccessToken>() {
+            return authApi.getAccessToken(code, metaData.getClientId(), metaData.getClientSecret(), new EmptyBody()).map(new Func1<AccessTokenRepresentation, AccessToken>() {
                 @Override
                 public AccessToken call(AccessTokenRepresentation accessTokenRepresentation) {
                     return accessTokenMapper.transform(accessTokenRepresentation);

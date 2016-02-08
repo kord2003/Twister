@@ -21,7 +21,7 @@ public class RepositoryModule {
 
     @Provides
     @Singleton
-    public AuthRepository provideClientMetaDataRepository(AuthDataRepository impl) {
+    public AuthRepository provideAuthRepository(AuthDataRepository impl) {
         return impl;
     }
 }
